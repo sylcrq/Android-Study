@@ -15,7 +15,8 @@ import java.lang.ref.WeakReference;
  */
 public class ImageWorker {
 
-    // Memory and Disk Cache
+    private static final String TAG = "ImageWorker";
+
     private ImageCache mImageCache;
     private Bitmap mLoadingBitmap;
     protected Resources mResources;
@@ -25,6 +26,9 @@ public class ImageWorker {
         mResources = context.getResources();
     }
 
+    /**
+     * 核心函数
+     */
     public void loadImage(Object data, ImageView imageView) {
         if(data == null)
             return;
@@ -32,8 +36,7 @@ public class ImageWorker {
         BitmapDrawable drawable = null;
 
         if(mImageCache != null) {
-            // Try to get memory Cache
-            //drawable = mImageCache.getMemCache();
+            drawable = mImageCache.getBitmapDrawableFromMemCache(String.valueOf(data));
         }
 
         if(drawable != null) {
@@ -52,10 +55,11 @@ public class ImageWorker {
         final BitmapWorkerTask bitmapWorkerTask = getBitmapWorkerTask(imageView);
 
         if(bitmapWorkerTask != null) {
-            if(bitmapWorkerTask.mData == null || !bitmapWorkerTask.mData.equals(data))
+            if(bitmapWorkerTask.mData == null || !bitmapWorkerTask.mData.equals(data)) {
                 bitmapWorkerTask.cancel(true);
-            else
+            }else {
                 return false;
+            }
         }
 
         return true;
@@ -90,9 +94,8 @@ public class ImageWorker {
             Bitmap bitmap = null;
             BitmapDrawable drawable = null;
 
-            // get Bitmap from Disk Cache
             if(mImageCache != null && !isCancelled() && getAttachedImageView() != null) {
-                //bitmap =
+                bitmap = mImageCache.getBitmapFromDiskCache();
             }
 
             if(bitmap != null) {
