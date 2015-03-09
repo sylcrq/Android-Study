@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.support.v4.app.FragmentManager;
 import android.widget.ImageView;
 
 import java.lang.ref.WeakReference;
@@ -13,21 +14,37 @@ import java.lang.ref.WeakReference;
 /**
  * Created by shenyunlong on 3/5/15.
  */
-public class ImageWorker {
+public abstract class ImageWorker {
 
     private static final String TAG = "ImageWorker";
 
+    private static final int MESSAGE_INIT_DISK_CACHE = 0;
+    private static final int MESSAGE_CLEAR = 1;
+    private static final int MESSAGE_FLUSH = 2;
+    private static final int MESSAGE_CLOSE = 3;
+
     private ImageCache mImageCache;
+    private ImageCache.ImageCacheParams mCacheParams;
     private Bitmap mLoadingBitmap;
     protected Resources mResources;
 
-
+    /**
+     * 构造函数
+     */
     public ImageWorker(Context context) {
         mResources = context.getResources();
     }
 
+    public void addImageCache(FragmentManager fragmentManager, ImageCache.ImageCacheParams cacheParams) {
+        mCacheParams = cacheParams;
+        mImageCache = ImageCache.getInstance(fragmentManager, mCacheParams);
+
+        // Create Disk Cache
+        new CacheAsyncTask().execute(MESSAGE_INIT_DISK_CACHE);
+    }
+
     /**
-     * 核心函数
+     * loadImage
      */
     public void loadImage(Object data, ImageView imageView) {
         if(data == null)
@@ -56,8 +73,10 @@ public class ImageWorker {
 
         if(bitmapWorkerTask != null) {
             if(bitmapWorkerTask.mData == null || !bitmapWorkerTask.mData.equals(data)) {
+                // Cancel
                 bitmapWorkerTask.cancel(true);
             }else {
+                // 已经在执行了
                 return false;
             }
         }
@@ -94,12 +113,18 @@ public class ImageWorker {
             Bitmap bitmap = null;
             BitmapDrawable drawable = null;
 
+            String dataString = String.valueOf(mData);
+
             if(mImageCache != null && !isCancelled() && getAttachedImageView() != null) {
-                bitmap = mImageCache.getBitmapFromDiskCache();
+                bitmap = mImageCache.getBitmapFromDiskCache(dataString);
             }
 
             if(bitmap != null) {
                 drawable = new BitmapDrawable(mResources, bitmap);
+
+                if(mImageCache != null) {
+                    mImageCache.addBitmapToCache(dataString, drawable);
+                }
             }
 
             return drawable;
@@ -132,6 +157,10 @@ public class ImageWorker {
         }
     }
 
+    /**
+     * 子类实现
+     */
+    protected abstract Bitmap processBitmap();
 
     /**
      * A custom Drawable that will be attached to the imageView while the work is in progress.
@@ -149,6 +178,51 @@ public class ImageWorker {
 
         public BitmapWorkerTask getBitmapWorkerTask() {
             return mBitmapWorkerTaskWeakReference.get();
+        }
+    }
+
+    protected void initDiskCacheInternal() {
+        if(mImageCache != null) {
+            mImageCache.initDiskCache();
+        }
+    }
+
+    protected void clearCacheInternal() {
+        // TODO: clear cache
+    }
+
+    protected void flushCacheInternal() {
+        // TODO: flush Cache
+    }
+
+    protected void closeCacheInternal() {
+        // TODO: close Cache
+    }
+
+
+    /**
+     *
+     */
+    private class CacheAsyncTask extends AsyncTask<Integer, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Integer... params) {
+            switch (params[0]) {
+                case MESSAGE_INIT_DISK_CACHE:
+                    initDiskCacheInternal();
+                    break;
+                case MESSAGE_CLEAR:
+                    clearCacheInternal();
+                    break;
+                case MESSAGE_FLUSH:
+                    flushCacheInternal();
+                    break;
+                case MESSAGE_CLOSE:
+                    closeCacheInternal();
+                    break;
+            }
+
+            return null;
         }
     }
 }
