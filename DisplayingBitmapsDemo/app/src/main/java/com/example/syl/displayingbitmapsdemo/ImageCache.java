@@ -16,7 +16,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Objects;
 
 /**
  * Created by shenyunlong on 3/5/15.
@@ -35,10 +34,11 @@ public class ImageCache {
     private LruCache<String, BitmapDrawable> mMemCache;
     private DiskLruCache mDiskCache;
 
+    // 线程同步
     private final Object mDiskCacheLock = new Object();
 
     /**
-     * 构造函数
+     * private构造函数
      */
     private ImageCache(ImageCacheParams cacheParams) {
         mCacheParams = cacheParams;
@@ -62,7 +62,8 @@ public class ImageCache {
      * 获取单例
      */
     public static ImageCache getInstance(FragmentManager fragmentManager, ImageCacheParams cacheParams) {
-        final RetainFragment retainFragment = getRetainFragment(fragmentManager);
+        // TODO: ImageCacheParams DO NOT Change?
+        final RetainFragment retainFragment = findOrCreateRetainFragment(fragmentManager);
 
         ImageCache imageCache = (ImageCache)retainFragment.getObject();
         if(imageCache == null) {
@@ -73,7 +74,7 @@ public class ImageCache {
         return imageCache;
     }
 
-    private static RetainFragment getRetainFragment(FragmentManager fragmentManager) {
+    private static RetainFragment findOrCreateRetainFragment(FragmentManager fragmentManager) {
         RetainFragment fragment = (RetainFragment)fragmentManager.findFragmentByTag(TAG);
         if(fragment == null) {
             fragment = new RetainFragment();
@@ -145,7 +146,7 @@ public class ImageCache {
         if(data == null || value == null) {
             return;
         }
-
+        // Add to Memory Cache
         if(mMemCache != null) {
             mMemCache.put(data, value);
         }
@@ -153,6 +154,7 @@ public class ImageCache {
         String key = hashKeyForDisk(data);
         OutputStream outputStream = null;
 
+        // Add to Disk Cache
         synchronized (mDiskCacheLock) {
             if (mDiskCache != null) {
                 try {
@@ -319,6 +321,51 @@ public class ImageCache {
 
         public ImageCacheParams(Context context, String name) {
             mDiskCacheDir = getDiskCacheDir(context, name);
+        }
+    }
+
+    /**
+     * Clear Memory & Disk Cache
+     */
+    public void clearCache() {
+        if(mMemCache != null) {
+            mMemCache.evictAll();
+        }
+
+        synchronized (mDiskCacheLock) {
+            try {
+                if(mDiskCache != null && !mDiskCache.isClosed()) {
+                    mDiskCache.delete();
+                    mDiskCache = null;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void flush() {
+        synchronized (mDiskCacheLock) {
+            try {
+                if (mDiskCache != null) {
+                    mDiskCache.flush();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void close() {
+        synchronized (mDiskCacheLock) {
+            try {
+                if(mDiskCache != null && !mDiskCache.isClosed()) {
+                    mDiskCache.close();
+                    mDiskCache = null;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

@@ -181,28 +181,42 @@ public abstract class ImageWorker {
         }
     }
 
+    /**
+     * 子类Override
+     */
     protected void initDiskCacheInternal() {
         if(mImageCache != null) {
             mImageCache.initDiskCache();
         }
     }
 
+    /**
+     * 子类Override
+     */
     protected void clearCacheInternal() {
-        // TODO: clear cache
+        if(mImageCache != null) {
+            mImageCache.clearCache();
+        }
     }
-
-    protected void flushCacheInternal() {
-        // TODO: flush Cache
-    }
-
-    protected void closeCacheInternal() {
-        // TODO: close Cache
-    }
-
 
     /**
-     *
+     * 子类Override
      */
+    protected void flushCacheInternal() {
+        if(mImageCache != null) {
+            mImageCache.flush();
+        }
+    }
+
+    /**
+     * 子类Override
+     */
+    protected void closeCacheInternal() {
+        if(mImageCache != null) {
+            mImageCache.close();
+        }
+    }
+
     private class CacheAsyncTask extends AsyncTask<Integer, Void, Void> {
 
         @Override
@@ -224,5 +238,17 @@ public abstract class ImageWorker {
 
             return null;
         }
+    }
+
+    public void clearCache() {
+        new CacheAsyncTask().execute(MESSAGE_CLEAR);
+    }
+
+    public void flushCache() {
+        new CacheAsyncTask().execute(MESSAGE_FLUSH);
+    }
+
+    public void closeCache() {
+        new CacheAsyncTask().execute(MESSAGE_CLOSE);
     }
 }
