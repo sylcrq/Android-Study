@@ -1,68 +1,98 @@
 package com.example.syl.activitylifecycledemo;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.test.ActivityUnitTestCase;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.widget.TextView;
 
 
 public class AActivity extends ActionBarActivity {
 
-    private static final String TAG = "Activity A";
+    public static final String TAG = "Activity A";
+
+    private TextView mMethodList;
+    private TextView mStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_a);
 
-        // TODO:
-        Log.d(TAG, "onCreate");
+        mMethodList = (TextView)findViewById(R.id.lifecycle_list);
+        mStatus = (TextView)findViewById(R.id.status);
+
+        Log.d(TAG, getString(R.string.onCreate));
+
+        ActivityStatus.setStatus(TAG, getString(R.string.onCreate));
+        ActivityStatus.printStatus(mMethodList, mStatus);
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        // TODO:
-        Log.d(TAG, "onRestart");
+
+        Log.d(TAG, getString(R.string.onRestart));
+
+        ActivityStatus.setStatus(TAG, getString(R.string.onRestart));
+        ActivityStatus.printStatus(mMethodList, mStatus);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        // TODO:
-        Log.d(TAG, "onStart");
+
+        Log.d(TAG, getString(R.string.onStart));
+
+        ActivityStatus.setStatus(TAG, getString(R.string.onStart));
+        ActivityStatus.printStatus(mMethodList, mStatus);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // TODO:
-        Log.d(TAG, "onResume");
+
+        Log.d(TAG, getString(R.string.onResume));
+
+        ActivityStatus.setStatus(TAG, getString(R.string.onResume));
+        ActivityStatus.printStatus(mMethodList, mStatus);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        // TODO:
-        Log.d(TAG, "onPause");
+
+        Log.d(TAG, getString(R.string.onPause));
+
+        ActivityStatus.setStatus(TAG, getString(R.string.onPause));
+        ActivityStatus.printStatus(mMethodList, mStatus);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // TODO:
-        Log.d(TAG, "onDestroy");
+
+        Log.d(TAG, getString(R.string.onDestroy));
+
+        ActivityStatus.setStatus(TAG, getString(R.string.onDestroy));
+        ActivityStatus.printStatus(mMethodList, mStatus);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        // TODO:
-        Log.d(TAG, "onStop");
+
+        Log.d(TAG, getString(R.string.onStop));
+
+        ActivityStatus.setStatus(TAG, getString(R.string.onStop));
+        ActivityStatus.printStatus(mMethodList, mStatus);
     }
 
     public void startActivityB(View view) {
@@ -81,8 +111,11 @@ public class AActivity extends ActionBarActivity {
 
 
     public void startDialog(View view) {
-        DialogFragment dialogFragment = new MyDialogFragment();
-        dialogFragment.show(getFragmentManager(), "Dialog");
+        //DialogFragment dialogFragment = new MyDialogFragment();
+        //dialogFragment.show(getFragmentManager(), "Dialog");
+
+        Intent intent = new Intent(this, DialogActivity.class);
+        startActivity(intent);
     }
 
     @Override

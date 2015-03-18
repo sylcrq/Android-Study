@@ -24,6 +24,10 @@
             android:name=".CActivity"
             android:label="@string/title_activity_c" >
         </activity>
+        <activity
+            android:name=".DialogActivity"
+            android:label="@string/title_activity_dialog" >
+        </activity>
     </application>
 
 </manifest>

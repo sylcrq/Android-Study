@@ -22,10 +22,21 @@
     <string name="activity_c_button_3">Finish C</string>
 
     <string name="activity_button_4">Dialog</string>
-    <string name="lifecycle_list">Lifecycle List</string>
+    <string name="lifecycle_list">Lifecycle Method List</string>
     <string name="activity_status">Activity Status</string>
+
+    <string name="dialog_button">OK</string>
+
+    <string name="onCreate">onCreate</string>
+    <string name="onStart">onStart</string>
+    <string name="onResume">onResume</string>
+    <string name="onPause">onPause</string>
+    <string name="onStop">onStop</string>
+    <string name="onDestroy">onDestroy</string>
+    <string name="onRestart">onRestart</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_dialog">DialogActivity</string>
 
 </resources>

@@ -1,19 +1,118 @@
 package com.example.syl.activitylifecycledemo;
 
+import android.app.DialogFragment;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 
 public class CActivity extends ActionBarActivity {
+
+    public static final String TAG = "Activity C";
+
+    private TextView mMethodList;
+    private TextView mStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_c);
+
+        mMethodList = (TextView)findViewById(R.id.lifecycle_list);
+        mStatus = (TextView)findViewById(R.id.status);
+
+        Log.d(TAG, getString(R.string.onCreate));
+
+        ActivityStatus.setStatus(TAG, getString(R.string.onCreate));
+        ActivityStatus.printStatus(mMethodList, mStatus);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        Log.d(TAG, getString(R.string.onStop));
+
+        ActivityStatus.setStatus(TAG, getString(R.string.onStop));
+        ActivityStatus.printStatus(mMethodList, mStatus);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Log.d(TAG, getString(R.string.onDestroy));
+
+        ActivityStatus.setStatus(TAG, getString(R.string.onDestroy));
+        ActivityStatus.printStatus(mMethodList, mStatus);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        Log.d(TAG, getString(R.string.onPause));
+
+        ActivityStatus.setStatus(TAG, getString(R.string.onPause));
+        ActivityStatus.printStatus(mMethodList, mStatus);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Log.d(TAG, getString(R.string.onStart));
+
+        ActivityStatus.setStatus(TAG, getString(R.string.onStart));
+        ActivityStatus.printStatus(mMethodList, mStatus);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Log.d(TAG, getString(R.string.onResume));
+
+        ActivityStatus.setStatus(TAG, getString(R.string.onResume));
+        ActivityStatus.printStatus(mMethodList, mStatus);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        Log.d(TAG, getString(R.string.onRestart));
+
+        ActivityStatus.setStatus(TAG, getString(R.string.onRestart));
+        ActivityStatus.printStatus(mMethodList, mStatus);
+    }
+
+    public void startActivityA(View view) {
+        Intent intent = new Intent(this, AActivity.class);
+        startActivity(intent);
+    }
+
+    public void startActivityB(View view) {
+        Intent intent = new Intent(this, BActivity.class);
+        startActivity(intent);
+    }
+
+    public void finishActivityC(View view) {
+        finish();
+    }
+
+    public void startDialog(View view) {
+        //DialogFragment dialogFragment = new MyDialogFragment();
+        //dialogFragment.show(getFragmentManager(), "Dialog");
+
+        Intent intent = new Intent(this, DialogActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
