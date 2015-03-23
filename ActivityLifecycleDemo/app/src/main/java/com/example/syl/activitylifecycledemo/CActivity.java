@@ -1,6 +1,5 @@
 package com.example.syl.activitylifecycledemo;
 
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;

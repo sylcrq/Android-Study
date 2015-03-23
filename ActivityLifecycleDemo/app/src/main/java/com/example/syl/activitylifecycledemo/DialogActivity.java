@@ -24,6 +24,7 @@ public class DialogActivity extends Activity {
     public void button_on_click(View view) {
         finish();
     }
+
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        // Inflate the menu; this adds items to the action bar if it is present.
