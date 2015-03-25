@@ -20,20 +20,12 @@ public class MainActivity extends ActionBarActivity implements HeadlineFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        if (savedInstanceState == null) {
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.container, new PlaceholderFragment())
-//                    .commit();
-//        }
-
         if(findViewById(R.id.container) != null) {
 
             if(savedInstanceState != null)
                 return;
 
-            HeadlineFragment fragment = new HeadlineFragment();
-
-            //getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).commit();
+            HeadlineFragment fragment = HeadlineFragment.newInstance();
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().add(R.id.container, fragment).commit();
         }
@@ -63,23 +55,7 @@ public class MainActivity extends ActionBarActivity implements HeadlineFragment.
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void onFragmentInteraction(int position) {
+        // TODO:
     }
-
-//    /**
-//     * A placeholder fragment containing a simple view.
-//     */
-//    public static class PlaceholderFragment extends Fragment {
-//
-//        public PlaceholderFragment() {
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                                 Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-//            return rootView;
-//        }
-//    }
 }
