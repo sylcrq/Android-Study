@@ -2,7 +2,8 @@ package com.example.syl.fragmentbasicdemo;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.app.ListFragment;
+//import android.app.ListFragment;
+import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -18,11 +19,10 @@ public class HeadlineFragment extends ListFragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public static HeadlineFragment newInstance() {
+    public static HeadlineFragment newInstance(String s) {
         HeadlineFragment fragment = new HeadlineFragment();
         Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
+        args.putString("key", s);
         fragment.setArguments(args);
         return fragment;
     }
@@ -39,8 +39,7 @@ public class HeadlineFragment extends ListFragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            //mParam1 = getArguments().getString(ARG_PARAM1);
-            //mParam2 = getArguments().getString(ARG_PARAM2);
+            //
         }
 
         // 设置适配器
@@ -48,6 +47,12 @@ public class HeadlineFragment extends ListFragment {
                 android.R.layout.simple_list_item_1, Article.HEADLINE));
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -75,6 +80,8 @@ public class HeadlineFragment extends ListFragment {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
             mListener.onFragmentInteraction(position);
+
+            getListView().setItemChecked(position, true);
         }
     }
 

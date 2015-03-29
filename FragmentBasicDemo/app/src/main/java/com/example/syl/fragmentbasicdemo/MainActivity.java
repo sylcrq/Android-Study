@@ -1,7 +1,12 @@
 package com.example.syl.fragmentbasicdemo;
 
-import android.app.FragmentManager;
+//import android.app.FragmentManager;
+//import android.app.FragmentTransaction;
+
 import android.net.Uri;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
@@ -11,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity implements HeadlineFragment.OnFragmentInteractionListener {
@@ -20,13 +26,15 @@ public class MainActivity extends ActionBarActivity implements HeadlineFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // single-pane
         if(findViewById(R.id.container) != null) {
 
-            if(savedInstanceState != null)
-                return;
+            //if(savedInstanceState != null)
+            //    return;
 
-            HeadlineFragment fragment = HeadlineFragment.newInstance();
-            FragmentManager fragmentManager = getFragmentManager();
+            HeadlineFragment fragment = HeadlineFragment.newInstance("test");
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().add(R.id.container, fragment).commit();
         }
     }
@@ -56,6 +64,20 @@ public class MainActivity extends ActionBarActivity implements HeadlineFragment.
 
     @Override
     public void onFragmentInteraction(int position) {
-        // TODO:
+
+        //FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        if(findViewById(R.id.container) != null) {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            ArticleFragment articleFragment = ArticleFragment.newInstance(position);
+
+            fragmentTransaction.replace(R.id.container, articleFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }else {
+            ArticleFragment fragment = (ArticleFragment)fragmentManager.findFragmentById(R.id.fragment_article);
+            fragment.updateArticle(position);
+        }
     }
 }

@@ -2,7 +2,8 @@ package com.example.syl.fragmentbasicdemo;
 
 
 import android.os.Bundle;
-import android.app.Fragment;
+//import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ public class ArticleFragment extends Fragment {
 
     private static final String ARG_CURRENTPAGENUM = "current_page_num";
 
-    private int mCurrentPageNum;
+    private int mCurrentPageNum = 0;
 
     /**
      * Use this factory method to create a new instance of
@@ -52,13 +53,24 @@ public class ArticleFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_article, container, false);
 
-        TextView textView = (TextView)view.findViewById(R.id.article);
-        updateArticle(textView);
-
         return view;
     }
 
-    private void updateArticle(TextView textView) {
-        textView.setText(Article.ARTICLE[mCurrentPageNum]);
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        updateArticle(mCurrentPageNum);
+    }
+
+    public void updateArticle(int position) {
+        TextView textView = (TextView)getActivity().findViewById(R.id.article);
+
+        textView.setText(Article.ARTICLE[position]);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 }
