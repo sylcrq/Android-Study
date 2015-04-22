@@ -5,12 +5,14 @@ package com.example.syl.androidcleanarchdemo.data;
  */
 public class User {
 
+    private String mId;
     private String mName;
     private String mEmail;
     private String mFollowers;
     private String mDescription;
 
-    public User(String name, String email, String followers, String description) {
+    public User(String id, String name, String email, String followers, String description) {
+        this.mId = id;
         this.mName = name;
         this.mEmail = email;
         this.mFollowers = followers;
@@ -47,5 +49,11 @@ public class User {
 
     public void setName(String name) {
         this.mName = name;
+    }
+
+    public String getId() { return mId; }
+
+    public void setId(String id) {
+        this.mId = id;
     }
 }

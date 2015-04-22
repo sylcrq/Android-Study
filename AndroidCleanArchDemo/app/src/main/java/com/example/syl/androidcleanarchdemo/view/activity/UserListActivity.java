@@ -1,37 +1,26 @@
-package com.example.syl.androidcleanarchdemo.activity;
+package com.example.syl.androidcleanarchdemo.view.activity;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.syl.androidcleanarchdemo.R;
 
 
-public class UserDetailActivity extends ActionBarActivity {
-
-    public static final String TAG = "UserDetailActivity";
-
-    public static final String USER_ID = "user_id";
-
-    private int mUserId;
+public class UserListActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_detail);
-
-        mUserId = getIntent().getIntExtra(USER_ID, 0);
-
-        Log.d(TAG, "user id from intent = " + mUserId);
+        setContentView(R.layout.activity_user_list);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_user_detail, menu);
+        getMenuInflater().inflate(R.menu.menu_user_list, menu);
         return true;
     }
 
@@ -48,9 +37,5 @@ public class UserDetailActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public int getUserId() {
-        return mUserId;
     }
 }

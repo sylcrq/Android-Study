@@ -6,9 +6,17 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.example.syl.androidcleanarchdemo.fragment.UserListActivityFragment">
+    tools:context="com.example.syl.androidcleanarchdemo.view.fragment.UserListActivityFragment">
 
+    <!-- Loading Progress -->
+    <include layout="@layout/view_progress" />
+
+    <!-- Retry Button -->
+    <include layout="@layout/view_retry" />
+
+    <!-- User List -->
     <ListView android:id="@+id/user_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.example.syl.androidcleanarchdemo.activity;
+package com.example.syl.androidcleanarchdemo.view.activity;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;

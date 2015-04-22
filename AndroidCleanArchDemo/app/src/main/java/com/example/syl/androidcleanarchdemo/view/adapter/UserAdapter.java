@@ -1,4 +1,4 @@
-package com.example.syl.androidcleanarchdemo.adapter;
+package com.example.syl.androidcleanarchdemo.view.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.syl.androidcleanarchdemo.data.User;
-import com.example.syl.androidcleanarchdemo.data.UserListData;
 
 
 import java.util.List;
@@ -17,12 +16,13 @@ import java.util.List;
  * Created by shenyunlong on 4/20/15.
  */
 public class UserAdapter extends BaseAdapter {
-    private static List<User> mUserList = UserListData.getUserList();
+    private List<User> mUserList;
 
     private Context mContext;
 
-    public UserAdapter(Context context) {
+    public UserAdapter(Context context, List<User> userList) {
         this.mContext = context;
+        this.mUserList = userList;
     }
 
     @Override
@@ -37,7 +37,18 @@ public class UserAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return position;
+
+        String userId = mUserList.get(position).getId();
+        int id = -1;
+        //return Integer.getInteger(userId, -1);
+
+        try {
+            id = Integer.parseInt(userId);
+        }catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        return id;
     }
 
     @Override
