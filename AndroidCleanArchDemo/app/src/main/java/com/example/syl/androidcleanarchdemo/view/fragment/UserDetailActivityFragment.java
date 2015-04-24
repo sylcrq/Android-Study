@@ -15,7 +15,6 @@ import com.example.syl.androidcleanarchdemo.presenter.UserDetailPresenter;
 import com.example.syl.androidcleanarchdemo.view.UserDetailView;
 import com.example.syl.androidcleanarchdemo.view.activity.UserDetailActivity;
 import com.example.syl.androidcleanarchdemo.data.User;
-import com.example.syl.androidcleanarchdemo.data.UserListData;
 
 
 /**

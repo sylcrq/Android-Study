@@ -1,5 +1,8 @@
 package com.example.syl.androidcleanarchdemo.data;
 
+import com.example.syl.androidcleanarchdemo.data.datasource.CloudDataStore;
+import com.example.syl.androidcleanarchdemo.data.datasource.DataStore;
+
 import java.util.List;
 
 /**
@@ -31,25 +34,39 @@ public class UserDataRepository {
         void onError(String errMsg);
     }
 
-    public void getUserList(UserListCallBack callBack) {
-        // FIXME: TEST DATA
-        List<User> userList = UserListData.getUserList();
+    public void getUserList(final UserListCallBack callBack) {
 
-        if(userList != null) {
-            callBack.onLoadData(userList);
-        }else {
-            callBack.onError("Get User List Failed!");
-        }
+        DataStore dataStore = CloudDataStore.getInstance();
+        dataStore.getUserList(new DataStore.UserListCallBack() {
+            @Override
+            public void onLoadData(List<User> userList) {
+                callBack.onLoadData(userList);
+            }
+
+            @Override
+            public void onError(String errMsg) {
+                callBack.onError(errMsg);
+            }
+        });
     }
 
-    public void getUserDetail(String id, UserDetailCallBack callBack) {
-        // FIXME: TEST DATA
-        User user = UserListData.getUserById(id);
+    public void getUserDetail(String id, final UserDetailCallBack callBack) {
 
-        if(user != null) {
-            callBack.onLoadData(user);
-        }else {
-            callBack.onError("Get User Detail Failed!");
-        }
+        DataStore dataStore;
+        // TODO: if cached, get from disk
+        dataStore = CloudDataStore.getInstance();
+
+        dataStore.getUserDetail(id, new DataStore.UserDetailCallBack() {
+
+            @Override
+            public void onLoadData(User user) {
+                callBack.onLoadData(user);
+            }
+
+            @Override
+            public void onError(String errMsg) {
+                callBack.onError(errMsg);
+            }
+        });
     }
 }
